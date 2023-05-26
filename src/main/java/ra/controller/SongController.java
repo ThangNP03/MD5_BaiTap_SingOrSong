@@ -15,15 +15,16 @@ import ra.model.entity.SongForm;
 import ra.model.service.ISongService;
 import ra.model.service.SongServiceIMPL;
 
+import javax.transaction.SystemException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 public class SongController {
     ISongService songService = new SongServiceIMPL();
-    @GetMapping("/")
+    @GetMapping("")
     public String showListSong(Model model){
         List<Song> list =  songService.findAll();
         model.addAttribute("listSong",list);
@@ -38,7 +39,7 @@ public class SongController {
         return modelAndView;
     }
     @PostMapping("/save")
-    public ModelAndView saveProduct(@ModelAttribute SongForm songForm) {
+    public String  saveProduct(@ModelAttribute SongForm songForm) throws SystemException {
         MultipartFile multipartFile = songForm.getUrlSong();
         String fileName = multipartFile.getOriginalFilename();
         try {
@@ -51,6 +52,6 @@ public class SongController {
         ModelAndView modelAndView = new ModelAndView("/create");
         modelAndView.addObject("songForm", songForm);
         modelAndView.addObject("message", "Created new product successfully !");
-        return modelAndView;
+        return "redirect:/";
     }
 }

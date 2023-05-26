@@ -12,6 +12,8 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+import ra.model.service.ISongService;
+import ra.model.service.SongServiceIMPL;
 
 @Configuration
 @EnableWebMvc
@@ -45,5 +47,9 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 
+    }
+    @Bean
+    public ISongService songService(){
+        return new SongServiceIMPL();
     }
 }
