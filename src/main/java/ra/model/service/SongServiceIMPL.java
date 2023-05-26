@@ -1,11 +1,14 @@
 package ra.model.service;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import ra.model.entity.Song;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
 import java.util.List;
 
 public class SongServiceIMPL implements ISongService{
@@ -30,7 +33,10 @@ public class SongServiceIMPL implements ISongService{
 
     @Override
     public Song findById(Long id) {
-        return null;
+        String queryStr = "SELECT s FROM Song AS s WHERE s.id = :id";
+        TypedQuery<Song> query = entityManager.createQuery(queryStr, Song.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 
     @Override
@@ -39,7 +45,31 @@ public class SongServiceIMPL implements ISongService{
     }
 
     @Override
-    public void save(Song song) {
-
+    public void save(Song song) throws SystemException {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = sessionFactory.openSession();
+            transaction = (Transaction) session.beginTransaction();
+            if (findById(song.getId()) == null) {
+                Song song1 = findById(song.getId());
+                song1.setSongName(song.getSongName());
+                song1.setArtistName(song.getArtistName());
+                song1.setKindOfMusic(song.getKindOfMusic());
+                song1.setUrlSong(song.getUrlSong());
+            }
+            session.saveOrUpdate(song);
+            transaction.commit();
+        }catch (Exception e){
+            e.printStackTrace();
+            if (transaction != null){
+                transaction.rollback();
+            }
+        }finally {
+            if (session !=null){
+                session.close();
+            }
+        }
     }
+
 }

@@ -2,6 +2,7 @@ package ra.model.service;
 
 import ra.model.entity.Song;
 
+import javax.transaction.SystemException;
 import java.util.List;
 
 public interface ISongService {
@@ -11,6 +12,6 @@ public interface ISongService {
 
     void deleteById(Long id);
 
-    void save(Song song);
+    void save(Song song) throws SystemException;
 }
 

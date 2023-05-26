@@ -6,5 +6,45 @@
 </head>
 <body>
     <h1>Xin chào taats cả các bạn </h1>
+    <p>
+        <a th:href="@{/create}">
+            Add new song
+        </a>
+    </p>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>SongName</th>
+            <th>artistName</th>
+            <th>kindOfMusic</th>
+            <th>urlSong</th>
+        </tr>
+
+        </thead>
+        <th:block th:each="song,songStat:${listSong}">
+            <tbody>
+            <tr>
+                <td th:text="songStat + 1 "></td>
+
+
+                <td th:text="${song.getSongName()}"></td>
+
+
+                <td th:text="${song.getArtistName()}"></td>
+
+
+                <td th:text="${song.getKindOfMusic()}"></td>
+
+
+                <td ><audio controls>
+                    <source type="audio/mpeg" th:src="@{'/image/'+${song.getUrlSong()}}">
+                </audio></td>
+
+            </tr>
+            </tbody>
+        </th:block>
+    </table>
 </body>
 </html>
